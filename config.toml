@@ -20,5 +20,5 @@ smtp_port = 587 # Common port for TLS
 use_ssl = false # Set to true if using port 465 typically
 
 sender_email = "MS_LNqnhE@test-xkjn41m20e04z781.mlsender.net"
-sender_password = "" # Use App Password if possible!
-recipient_email = "greendude720@gmail.com"
+sender_password = "mssp.6k5ozcb.0r83ql3ok2plzw1j.Wq6csPR" # Use App Password if possible!
+recipient_emails = ["greendude720@gmail.com", "garrettlshuck@gmail.com"] # Add more emails inside the brackets, separated by commas

@@ -55,17 +55,22 @@ try:
     USE_SSL = email_config.get('use_ssl', False)
     SENDER_EMAIL = email_config.get('sender_email')
     SENDER_PASSWORD = email_config.get('sender_password')
-    RECIPIENT_EMAIL = email_config.get('recipient_email')
+    RECIPIENT_EMAILS = email_config.get('recipient_emails')
 
-    # Basic validation for Email config
-    if not all([SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD, RECIPIENT_EMAIL]):
-        print(f"Warning: Email configuration in {CONFIG_FILE} is incomplete. Email notifications will be disabled.")
+    # Updated validation for Email config
+    if not all([SMTP_SERVER, SMTP_PORT, SENDER_EMAIL, SENDER_PASSWORD]):
+        print(f"Warning: Basic SMTP server/sender configuration in {CONFIG_FILE} is incomplete. Email notifications will be disabled.")
         SEND_EMAIL = False
+        RECIPIENT_EMAILS = []
+    elif not RECIPIENT_EMAILS or not isinstance(RECIPIENT_EMAILS, list) or not all(isinstance(email, str) and '@' in email for email in RECIPIENT_EMAILS):
+        print(f"Warning: 'recipient_emails' in {CONFIG_FILE} is missing, empty, or not a valid list of email addresses. Email notifications will be disabled.")
+        SEND_EMAIL = False
+        RECIPIENT_EMAILS = []
     elif "your_smtp_server" in SMTP_SERVER or "your_email" in SENDER_EMAIL or "your_app_password" in SENDER_PASSWORD:
-        print(f"Warning: Email configuration in {CONFIG_FILE} seems to contain placeholders. Email notifications might fail.")
-        SEND_EMAIL = True # Attempt anyway
+         print(f"Warning: SMTP/sender configuration in {CONFIG_FILE} seems to contain placeholders. Email notifications might fail.")
+         SEND_EMAIL = True
     else:
-        SEND_EMAIL = True
+         SEND_EMAIL = True
 
 except FileNotFoundError:
     print(f"Error: {CONFIG_FILE} not found. Please create it.")
@@ -110,9 +115,12 @@ def save_current_listings(filename, gi_numbers_set):
         print(f"Warning: Could not write listings file {filename}: {e}")
 
 def send_email_notification(new_listings):
-    """Sends an email notification using smtplib."""
+    """Sends an email notification using smtplib to each recipient."""
     if not SEND_EMAIL:
         print("Email notifications disabled due to incomplete config.")
+        return
+    if not RECIPIENT_EMAILS:
+        print("No recipient emails configured. Skipping email notification.")
         return
 
     subject = f"GunSniperBot: {len(new_listings)} New Listings Found"
@@ -134,13 +142,6 @@ def send_email_notification(new_listings):
         body_html += f"</li><br>"
     body_html += "</ul></body></html>"
 
-    msg = EmailMessage()
-    msg['Subject'] = subject
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECIPIENT_EMAIL
-    msg.set_content("Please enable HTML emails to view listings.") # Fallback for non-HTML clients
-    msg.add_alternative(body_html, subtype='html')
-
     server = None # Initialize server variable
     try:
         print(f"Connecting to SMTP server {SMTP_SERVER}:{SMTP_PORT}...")
@@ -152,9 +153,27 @@ def send_email_notification(new_listings):
 
         print("Logging into SMTP server...")
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        print("Sending email notification...")
-        server.send_message(msg)
-        print("Email notification sent successfully.")
+
+        success_count = 0
+        fail_count = 0
+        for recipient in RECIPIENT_EMAILS:
+            try:
+                print(f"Sending email notification to {recipient}...")
+                msg = EmailMessage()
+                msg['Subject'] = subject
+                msg['From'] = SENDER_EMAIL
+                msg['To'] = recipient # Send to individual recipient
+                msg.set_content("Please enable HTML emails to view listings.") # Fallback
+                msg.add_alternative(body_html, subtype='html')
+
+                server.send_message(msg)
+                print(f"Email notification sent successfully to {recipient}.")
+                success_count += 1
+            except Exception as e:
+                print(f"Failed to send email to {recipient}: {e}")
+                fail_count += 1
+
+        print(f"Email sending complete. Success: {success_count}, Failed: {fail_count}")
 
     except smtplib.SMTPAuthenticationError:
         print("Error: SMTP Authentication failed. Check sender_email and sender_password in config.")
@@ -173,24 +192,20 @@ def send_email_notification(new_listings):
                 pass # Ignore errors during quit
 
 def send_test_email():
-    """Sends a simple test email notification using smtplib."""
+    """Sends a simple test email notification using smtplib to each recipient."""
     if not SEND_EMAIL:
         print("Cannot send test email: Notifications disabled due to incomplete config.")
+        return False
+    if not RECIPIENT_EMAILS:
+        print("No recipient emails configured. Cannot send test email.")
         return False
 
     subject = "GunSniperBot: Test Email Notification"
     body_html = "<html><body><p>This is a test email from GunSniperBot.</p></body></html>"
 
-    msg = EmailMessage()
-    msg['Subject'] = subject
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECIPIENT_EMAIL
-    msg.set_content("GunSniperBot: Test Email Notification.") # Fallback
-    msg.add_alternative(body_html, subtype='html')
-
     server = None
+    overall_success = True
     try:
-        print(f"Attempting to send test email to {RECIPIENT_EMAIL}...")
         print(f"Connecting to SMTP server {SMTP_SERVER}:{SMTP_PORT}...")
         if USE_SSL:
             server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
@@ -200,17 +215,35 @@ def send_test_email():
 
         print("Logging into SMTP server...")
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        print("Sending test email...")
-        server.send_message(msg)
-        print("Test email sent successfully.")
-        return True
+
+        success_count = 0
+        fail_count = 0
+        print(f"Attempting to send test emails to: {', '.join(RECIPIENT_EMAILS)}...")
+        for recipient in RECIPIENT_EMAILS:
+            try:
+                print(f"Sending test email to {recipient}...")
+                msg = EmailMessage()
+                msg['Subject'] = subject
+                msg['From'] = SENDER_EMAIL
+                msg['To'] = recipient # Send to individual recipient
+                msg.set_content("GunSniperBot: Test Email Notification.") # Fallback
+                msg.add_alternative(body_html, subtype='html')
+
+                server.send_message(msg)
+                print(f"Test email sent successfully to {recipient}.")
+                success_count += 1
+            except Exception as e:
+                print(f"Failed to send test email to {recipient}: {e}")
+                fail_count += 1
+                overall_success = False
+
+        print(f"Test email sending complete. Success: {success_count}, Failed: {fail_count}")
+        return overall_success
 
     except smtplib.SMTPAuthenticationError:
         print("Error: SMTP Authentication failed. Check sender_email and sender_password in config.")
-        return False
     except smtplib.SMTPConnectError as e:
         print(f"Error: Could not connect to SMTP server {SMTP_SERVER}:{SMTP_PORT}. {e}")
-        return False
     except smtplib.SMTPServerDisconnected:
          print("Error: SMTP server disconnected unexpectedly.")
          return False
@@ -439,7 +472,7 @@ schedule.every(RUN_INTERVAL_SECONDS).seconds.do(run_scrape_job)
 print(f"Script started. Scheduling job to run every {RUN_INTERVAL_SECONDS} seconds.")
 print(f"Notifications configured: SEND_EMAIL={SEND_EMAIL}")
 if SEND_EMAIL:
-    print(f"Notifications will be sent from {SENDER_EMAIL} to {RECIPIENT_EMAIL}")
+    print(f"Notifications will be sent from {SENDER_EMAIL} to: {', '.join(RECIPIENT_EMAILS)}")
 print(f"Persistence file: {PREVIOUS_LISTINGS_FILE}")
 print(f"First run will be at approximately {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() + RUN_INTERVAL_SECONDS))}")
 
