@@ -1,0 +1,19 @@
+[schedule]
+run_seconds = 5 # Run interval in seconds
+
+[email]
+# --- Email Configuration ---
+# Note: Using App Passwords is recommended for services like Gmail.
+
+# Example for Gmail:
+# smtp_server = "smtp.gmail.com"
+# smtp_port = 587 # Use 465 for SSL
+
+# Example for generic SMTP:
+smtp_server = "smtp.mailersend.net"
+smtp_port = 587 # Common port for TLS
+use_ssl = false # Set to true if using port 465 typically
+
+sender_email = "MS_LNqnhE@test-xkjn41m20e04z781.mlsender.net"
+sender_password = "" # Use App Password if possible!
+recipient_email = "greendude720@gmail.com"
