@@ -13,13 +13,15 @@ import urllib.parse
 
 # Define a simple class to hold listing data
 class Listing:
-    def __init__(self, name, gi, price):
+    def __init__(self, name, gi, price, image_url, listing_url):
         self.name = name
         self.gi = gi
         self.price = price
+        self.image_url = image_url
+        self.listing_url = listing_url
 
     def __repr__(self):
-        return f"Listing(name='{self.name}', gi='{self.gi}', price='{self.price}')"
+        return f"Listing(name='{self.name}', gi='{self.gi}', price='{self.price}', image_url='{self.image_url}', listing_url='{self.listing_url}')"
 
 # --- Configuration Loading ---
 CONFIG_FILE = "config.toml"
@@ -121,7 +123,14 @@ def send_email_notification(new_listings):
         # Basic escaping for HTML safety
         name_esc = listing.name.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         price_esc = listing.price.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        body_html += f"<li><b>{name_esc}</b><br>GI#: {listing.gi}<br>Price: {price_esc}</li><br>"
+        # Assuming image_url and listing_url are safe or appropriately sanitized if needed
+        body_html += f"<li>"
+        body_html += f"<img src='{listing.image_url}' alt='Listing Image' width='100'><br>" # Add image thumbnail
+        body_html += f"<b>{name_esc}</b><br>"
+        body_html += f"GI#: {listing.gi}<br>"
+        body_html += f"Price: {price_esc}<br>"
+        body_html += f"Link: <a href='{listing.listing_url}'>View Listing</a>"
+        body_html += f"</li><br>"
     body_html += "</ul></body></html>"
 
     msg = EmailMessage()
@@ -249,7 +258,14 @@ def process_page(url, session, listings_list, processed_gi_numbers_set, page_num
             # --- Extract Name, GI, Price (Logic remains the same) ---
             name_tag = item_div.find('a', href=re.compile(r'guns-for-sale-online/'))
             name = "Name not found"
+            listing_url = "Listing URL not found" # Default value
             if name_tag:
+                # Extract Listing URL
+                href = name_tag.get('href')
+                if href:
+                     # Ensure the URL is absolute
+                     listing_url = urllib.parse.urljoin("https://www.gunsinternational.com/", href)
+
                 strong_tag = name_tag.find('strong')
                 if strong_tag and strong_tag.get_text(strip=True):
                     name = strong_tag.get_text(strip=True)
@@ -257,6 +273,14 @@ def process_page(url, session, listings_list, processed_gi_numbers_set, page_num
                     link_text = name_tag.get_text(strip=True)
                     if link_text:
                         name = link_text
+
+            # Extract Image URL
+            image_tag = item_div.find('img')
+            image_url = "Image URL not found" # Default value
+            if image_tag and image_tag.get('src'):
+                img_src = image_tag.get('src')
+                # Ensure the URL is absolute
+                image_url = urllib.parse.urljoin("https://www.gunsinternational.com/", img_src)
 
             gi_number = "GI# not found"
             div_text_gi = item_div.get_text()
@@ -273,7 +297,7 @@ def process_page(url, session, listings_list, processed_gi_numbers_set, page_num
             # --- Validate and Store ---
             if name != "Name not found" and gi_number != "GI# not found":
                  if gi_number not in processed_gi_numbers_set:
-                     listing_obj = Listing(name=name, gi=gi_number, price=price)
+                     listing_obj = Listing(name=name, gi=gi_number, price=price, image_url=image_url, listing_url=listing_url)
                      listings_list.append(listing_obj)
                      processed_gi_numbers_set.add(gi_number)
                      listings_added_on_this_page += 1
