@@ -2,6 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+# Define a simple class to hold listing data
+class Listing:
+    def __init__(self, name, gi, price):
+        self.name = name
+        self.gi = gi
+        self.price = price
+
+    def __repr__(self):
+        return f"Listing(name='{self.name}', gi='{self.gi}', price='{self.price}')"
+
 # URLs for the first two pages
 URL_PAGE_1 = "https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=1"
 URL_PAGE_2 = "https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=26" # Assuming 25 items per page
@@ -15,12 +25,12 @@ HEADERS = {
 session = requests.Session()
 session.headers.update(HEADERS)
 
-listings = []
+listings = [] # This will hold Listing objects
 processed_gi_numbers = set()
 TARGET_COUNT = 50
 
 def process_page(url, session, listings, processed_gi_numbers):
-    """Fetches a page, parses it, and extracts listing data."""
+    """Fetches a page, parses it, and extracts listing data into Listing objects."""
     global TARGET_COUNT
     print(f"Processing page: {url}")
     try:
@@ -49,19 +59,19 @@ def process_page(url, session, listings, processed_gi_numbers):
                 break
 
             # --- Extract Name ---
-            # Look for the link, then prioritize the strong tag inside it.
             name_tag = item_div.find('a', href=re.compile(r'guns-for-sale-online/'))
             name = "Name not found"
             if name_tag:
                 strong_tag = name_tag.find('strong')
+                # Try strong tag first
                 if strong_tag and strong_tag.get_text(strip=True):
                     name = strong_tag.get_text(strip=True)
                 else:
-                    # Fallback to the whole link text if no strong tag or it's empty
+                    # Fallback to the link's text if strong tag is missing/empty
                     link_text = name_tag.get_text(strip=True)
                     if link_text: # Use link text only if it's not empty
-                         name = link_text
-                    # If both strong and link text are empty/missing, keep "Name not found"
+                        name = link_text
+                    # If both strong tag and link text are empty, name remains "Name not found"
 
             # --- Extract GI Number ---
             gi_number = "GI# not found"
@@ -71,10 +81,26 @@ def process_page(url, session, listings, processed_gi_numbers):
             if match:
                 gi_number = match.group(1)
 
+            # --- Extract Price ---
+            price = "Price not found"
+            # Look for text matching a price pattern ($XXX,XXX.XX)
+            # Search within the text content of the div
+            div_text_price = item_div.get_text(separator=' ') # Use separator for better matching
+            price_match = re.search(r'\$\s*([\d,]+\.?\d*)', div_text_price)
+            if price_match:
+                price = f"${price_match.group(1)}" # Format with dollar sign
+            else:
+                 # Fallback: Check for specific elements if direct text search fails
+                 # Example: price_tag = item_div.find('span', class_='price-class') # Adjust selector
+                 # if price_tag: price = price_tag.get_text(strip=True)
+                 pass # Keep "Price not found" if no pattern match
+
             # --- Validate and Store ---
             if name != "Name not found" and gi_number != "GI# not found":
                  if gi_number not in processed_gi_numbers:
-                     listings.append({'name': name, 'gi_number': gi_number})
+                     # Create a Listing object
+                     listing_obj = Listing(name=name, gi=gi_number, price=price)
+                     listings.append(listing_obj)
                      processed_gi_numbers.add(gi_number)
                      # print(f"Added: {name} (GI#: {gi_number})") # Optional: print progress
                  # else:
@@ -101,7 +127,8 @@ if len(listings) < TARGET_COUNT:
 print("\n--- Final Results ---")
 print(f"Found {len(listings)} unique listings:")
 for i, listing in enumerate(listings):
-    print(f"  {i+1}. Name: {listing['name']}, GI#: {listing['gi_number']}")
+    # Print data from the Listing object attributes for consistent format
+    print(f"  {i+1}. Name: {listing.name}\n     GI#: {listing.gi}\n     Price: {listing.price}")
     print() # Add a blank line after each listing
 
 # Note: Selectors and logic refined based on previous outputs.
