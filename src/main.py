@@ -1,5 +1,5 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import re
 import toml
 import schedule
@@ -13,15 +13,15 @@ import urllib.parse
 
 # Define a simple class to hold listing data
 class Listing:
-    def __init__(self, name, gi, price, image_url, listing_url):
-        self.name = name
+    def __init__(self, title, description, gi, price, listing_url):
+        self.title = title
+        self.description = description
         self.gi = gi
         self.price = price
-        self.image_url = image_url
         self.listing_url = listing_url
 
     def __repr__(self):
-        return f"Listing(name='{self.name}', gi='{self.gi}', price='{self.price}', image_url='{self.image_url}', listing_url='{self.listing_url}')"
+        return f"Listing(title='{self.title}', description='{self.description[:50]}...', gi='{self.gi}', price='{self.price}', listing_url='{self.listing_url}')"
 
 # --- Configuration Loading ---
 CONFIG_FILE = "config.toml"
@@ -121,14 +121,15 @@ def send_email_notification(new_listings):
     body_html += "<ul>"
     for listing in new_listings:
         # Basic escaping for HTML safety
-        name_esc = listing.name.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        title_esc = listing.title.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+        desc_esc = listing.description.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
         price_esc = listing.price.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        # Assuming image_url and listing_url are safe or appropriately sanitized if needed
+
         body_html += f"<li>"
-        body_html += f"<img src='{listing.image_url}' alt='Listing Image' width='100'><br>" # Add image thumbnail
-        body_html += f"<b>{name_esc}</b><br>"
+        body_html += f"<b>{title_esc}</b><br>"
         body_html += f"GI#: {listing.gi}<br>"
         body_html += f"Price: {price_esc}<br>"
+        body_html += f"Description: {desc_esc[:200]}...<br>"
         body_html += f"Link: <a href='{listing.listing_url}'>View Listing</a>"
         body_html += f"</li><br>"
     body_html += "</ul></body></html>"
@@ -244,7 +245,8 @@ def process_page(url, session, listings_list, processed_gi_numbers_set, page_num
                  soup = BeautifulSoup(response.text, 'html.parser')
         # --- End Age Verification ---
 
-        listing_divs = soup.find_all(lambda tag: tag.name == 'div' and 'GI#:' in tag.get_text())
+        # Use a more specific selector for the listing containers
+        listing_divs = soup.find_all('div', class_='listing_guts')
         # print(f"Found {len(listing_divs)} potential listing divs on page {page_number}.") # Optional debug print
 
         if not listing_divs and page_number > 1: # Check if we got an empty results page (beyond page 1)
@@ -255,49 +257,85 @@ def process_page(url, session, listings_list, processed_gi_numbers_set, page_num
             if len(listings_list) >= TARGET_COUNT:
                 break # Stop processing divs if global target is met
 
-            # --- Extract Name, GI, Price (Logic remains the same) ---
-            name_tag = item_div.find('a', href=re.compile(r'guns-for-sale-online/'))
-            name = "Name not found"
-            listing_url = "Listing URL not found" # Default value
-            if name_tag:
-                # Extract Listing URL
-                href = name_tag.get('href')
-                if href:
-                     # Ensure the URL is absolute
-                     listing_url = urllib.parse.urljoin("https://www.gunsinternational.com/", href)
-
-                strong_tag = name_tag.find('strong')
-                if strong_tag and strong_tag.get_text(strip=True):
-                    name = strong_tag.get_text(strip=True)
-                else:
-                    link_text = name_tag.get_text(strip=True)
-                    if link_text:
-                        name = link_text
-
-            # Extract Image URL
-            image_tag = item_div.find('img')
-            image_url = "Image URL not found" # Default value
-            if image_tag and image_tag.get('src'):
-                img_src = image_tag.get('src')
-                # Ensure the URL is absolute
-                image_url = urllib.parse.urljoin("https://www.gunsinternational.com/", img_src)
-
+            # --- Extract Title, URL, Description, GI, Price ---
+            title = "Title not found"
+            listing_url = "URL not found"
+            description = "Description not found"
             gi_number = "GI# not found"
+            price = "Price not found"
+
+            # Find the main title link more reliably
+            title_link_tag = item_div.find('div', class_='title_link')
+            if title_link_tag:
+                actual_link = title_link_tag.find('a', href=re.compile(r'guns-for-sale-online/'))
+                if actual_link:
+                    title = actual_link.get_text(strip=True)
+                    href = actual_link.get('href')
+                    if href:
+                        # Ensure the URL is absolute
+                        listing_url = urllib.parse.urljoin("https://www.gunsinternational.com/", href)
+
+            # Find the description container reliably
+            # The description is typically in a div following the image and title divs
+            desc_container = item_div.find('div', class_='col-md-12') # This might need adjustment if structure varies
+            if desc_container:
+                # Attempt to extract text before the "...Click for more info" link
+                desc_parts = []
+                more_info_link_found = False
+                for content in desc_container.contents:
+                    if isinstance(content, str):
+                        cleaned_content = content.strip()
+                        if cleaned_content:
+                             desc_parts.append(cleaned_content)
+                    elif isinstance(content, Tag) and content.name == 'a' and '...Click for more info' in content.get_text(strip=True):
+                        more_info_link_found = True
+                        break # Stop collecting text once the link is found
+                    elif isinstance(content, Tag):
+                        # Include text from other tags like <b>, <i> etc if needed
+                        # For now, we only take direct text nodes before the link
+                        pass
+
+                if desc_parts:
+                     description = ' '.join(desc_parts)
+                elif not more_info_link_found and desc_container.get_text(strip=True):
+                     # Fallback: If no link found, take all text, but this might include seller info
+                     # Let's try a more targeted approach for the text node directly inside col-md-12
+                     direct_text = ''.join(desc_container.find_all(string=True, recursive=False)).strip()
+                     if direct_text:
+                         description = direct_text
+                     else:
+                         # Last resort: grab all text and remove the link text if possible
+                         all_text = desc_container.get_text(separator=' ', strip=True)
+                         click_link_text = item_div.find('a', string=re.compile(r'\.\.\.Click for more info'))
+                         if click_link_text:
+                             description = all_text.replace(click_link_text.get_text(strip=True), '').strip()
+                         else:
+                             description = all_text # Might still contain seller info
+
+            # --- Extract GI (Use existing logic, but scope it to item_div) ---
             div_text_gi = item_div.get_text()
             gi_match = re.search(r'GI#:\s*(\d+)', div_text_gi)
             if gi_match:
                 gi_number = gi_match.group(1)
 
-            price = "Price not found"
+            # --- Extract Price (Use existing logic, but scope it to item_div) ---
             div_text_price = item_div.get_text(separator=' ')
             price_match = re.search(r'\$\s*([\d,]+\.?\d*)', div_text_price)
             if price_match:
                 price = f"${price_match.group(1)}"
 
             # --- Validate and Store ---
-            if name != "Name not found" and gi_number != "GI# not found":
+            # Validate based on finding GI number and a valid URL
+            if gi_number != "GI# not found" and listing_url != "URL not found" and not listing_url.endswith("gunsinternational.com/"):
                  if gi_number not in processed_gi_numbers_set:
-                     listing_obj = Listing(name=name, gi=gi_number, price=price, image_url=image_url, listing_url=listing_url)
+                     # Create Listing object with title and description
+                     listing_obj = Listing(
+                         title=title,
+                         description=description,
+                         gi=gi_number,
+                         price=price,
+                         listing_url=listing_url
+                     )
                      listings_list.append(listing_obj)
                      processed_gi_numbers_set.add(gi_number)
                      listings_added_on_this_page += 1
@@ -363,7 +401,11 @@ def run_scrape_job():
         new_listings_details = [lst for lst in current_listings if lst.gi in new_gi_numbers]
         print("--- New Listings Details ---")
         for listing in new_listings_details:
-             print(f"  Name: {listing.name}\n     GI#: {listing.gi}\n     Price: {listing.price}")
+             print(f"  Title: {listing.title}")
+             print(f"     GI#: {listing.gi}")
+             print(f"     Price: {listing.price}")
+             print(f"     Desc: {listing.description[:100]}...")
+             print(f"     URL: {listing.listing_url}")
              print()
         send_email_notification(new_listings_details)
     else:
