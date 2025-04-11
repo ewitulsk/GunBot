@@ -1,5 +1,10 @@
 [schedule]
 run_seconds = 5 # Run interval in seconds
+target_listings_count = 100 # Number of listings to aim for
+
+[search] # New section for search parameters
+search_keyword = "smith 27"
+search_type_category = "Revolvers"
 
 [email]
 # --- Email Configuration ---

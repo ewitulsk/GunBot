@@ -1,0 +1,449 @@
+Warning: Email configuration in config.toml is incomplete. Email notifications will be disabled.
+Script started. Scheduling job to run every 5 seconds.
+Notifications configured: SEND_EMAIL=False
+Persistence file: previous_listings.txt
+First run will be at approximately 2025-04-10 23:01:18
+
+--- Running scrape job at 2025-04-10 23:01:13 ---
+Targeting 100 listings.
+Loaded 0 listings from previous run.
+Processing page 1: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=1
+Processing page 2: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=26
+Processing page 3: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=51
+Reached target count of 100 during page 3.
+
+--- Scrape Results ---
+Scraping finished. Found 100 unique listings in current run.
+Found 100 new listings since last run.
+--- New Listings Details ---
+  Name: New Today
+     GI#: 103060910
+     Price: $3,495.00
+
+  Name: SMITH & WESSON 27 2, 6BARREL, NEW IN SMITH WOOD PRESENTATION CASE WITH CLEANING TOOLS ALL IN FACTORY SHIPPING CARTON
+     GI#: 103059524
+     Price: $2,295.00
+
+  Name: COAST GUARD SMITH & WESSON"ONE" OF 107 SHIPPED TO REVENUE CUTTER SERVICE IN 1890
+     GI#: 103053193
+     Price: $5,300.00
+
+  Name: SMITH AND WESSON 28 2 HIGHWAY PATROLMAN 357 MAGNUM
+     GI#: 103059450
+     Price: $675.00
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103058942
+     Price: $1,499.99
+
+  Name: Smith & Wesson Model 27 2 in 357Mag
+     GI#: 103058438
+     Price: $1,399.99
+
+  Name: DOCUMENTED TEXAS RANGER OWNED COLT S.A.A. REVOLVER from COLLECTING TEXAS44/40RANGER BADGE & DOCUMENTS INCLUDED
+     GI#: 103058383
+     Price: $50,000.00
+
+  Name: SMITH & WESSON 27 2 357 MAGNUM
+     GI#: 103058276
+     Price: $1,295.00
+
+  Name: SMITH & WESSON MODEL 27 2
+     GI#: 103056585
+     Price: $1,200.00
+
+  Name: 1954 Smith & Wesson Pre 27 Excellent Unfired W/Gold Box, 6 Inch. Trades Welcome.
+     GI#: 103055439
+     Price: $2,999.00
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103053501
+     Price: $1,350.99
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103053484
+     Price: $1,495.99
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103053483
+     Price: $1,450.99
+
+  Name: Smith & WessonModel 27 2.357 MAG
+     GI#: 103052267
+     Price: $1,099.99
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103050933
+     Price: $1,350.99
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103050932
+     Price: $1,895.99
+
+  Name: SMITH & WESSON 27 3 .357 MAG
+     GI#: 103050927
+     Price: $1,095.99
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 103050748
+     Price: $1,750.99
+
+  Name: SMITH & WESSON 27 9 .357 MAG
+     GI#: 103050699
+     Price: $899.99
+
+  Name: "Smith & Wesson 27 Revolver .357 Magnum (PR73312)
+     GI#: 103049978
+     Price: $2,250.00
+
+  Name: **OUTSTANDING** Smith and Wesson S&W NYSP model 520 with Original Box, label and tools. 57 58 27 28
+     GI#: 103049214
+     Price: $1,799.00
+
+  Name: Smith & Wesson Pre 27 .357 Mag Mfg.1957
+     GI#: 103049110
+     Price: $1,400.00
+
+  Name: 1955 Manufactured Smith & Wesson Pre Model 27 chambered in .357 Magnum w/ 6" Barrel
+     GI#: 103048657
+     Price: $1,995.00
+
+  Name: Smith & WessonModel 28 2.357 Mag
+     GI#: 103048250
+     Price: $1,399.99
+
+  Name: SMITH & WESSON (PRE 27) REVOLVER from COLLECTING TEXASMADE 1951LAW ENFORCEMENT CONNECTIONEXTRA BARREL INCLUDED
+     GI#: 103047720
+     Price: $1,900.00
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103047628
+     Price: $1,199.99
+
+  Name: Smith & Wesson27 9.357 Mag
+     GI#: 103045489
+     Price: $899.99
+
+  Name: SMITH & WESSON First Model .32 Hand EjectorModel 1896 .32 ACP
+     GI#: 103045094
+     Price: $599.99
+
+  Name: SMITH & WESSON 27 S&W CLASSICS .357 MAG
+     GI#: 103045055
+     Price: $999.99
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR73120)
+     GI#: 103042754
+     Price: $1,350.00
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103042309
+     Price: $1,599.99
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR73119)
+     GI#: 103041262
+     Price: $1,350.00
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103039951
+     Price: $1,399.99
+
+  Name: Smith & Wesson27 2.357 Magnum
+     GI#: 103039903
+     Price: $2,599.99
+
+  Name: "Smith & Wesson 27 3 Revolver .357 Magnum (PR73216)
+     GI#: 103039858
+     Price: $1,095.00
+
+  Name: Smith & Wesson27 2.357 Magnum
+     GI#: 103038863
+     Price: $1,399.99
+
+  Name: Smith & WessonPre Model 27357 Magnum
+     GI#: 103035395
+     Price: $899.99
+
+  Name: Smith & WessonModel 28.357 Mag
+     GI#: 103033863
+     Price: $849.99
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103032614
+     Price: $1,499.99
+
+  Name: SMITH & WESSON 27 9 .357 MAG
+     GI#: 103031202
+     Price: $869.99
+
+  Name: SMITH & WESSON MODEL 27 2 BLUED .357 MAG 8 3/8" w/FACTORY CASE & PAPERS
+     GI#: 103030820
+     Price: $1,999.99
+
+  Name: SMITH & WESSON MODEL 27 2 REVOLVER W/ PRESENTATION CASE
+     GI#: 103030651
+     Price: $1,850.00
+
+  Name: Smith & Wesson 27 3.357 Magnum
+     GI#: 103030513
+     Price: $1,499.99
+
+  Name: "Smith & Wesson 27 9 Revolver .357 Magnum (NGZ3811) NEW DTX
+     GI#: 103027617
+     Price: $1,299.95
+
+  Name: SMITH & WESSON 27 NO DASH, 357 MAGNUM, 6 1/2BLUE AS NEW IN THE SMITH PRESENTATION WOOD CASE WITH CLEANING TOOLS
+     GI#: 103027574
+     Price: $2,495.00
+
+  Name: SMITH & WESSON MODEL 27 .357 MAG
+     GI#: 103027034
+     Price: $999.99
+
+  Name: Smith & Wesson 28 2 N Frame Highway Patrolman , Boxed, Unfired, .357 Magnum, 6 inch
+     GI#: 103024558
+     Price: $1,855.00
+
+  Name: SMITH & WESSON 27 .357 MAG
+     GI#: 103021241
+     Price: $950.99
+
+  Name: Smith & Wesson 27 2 Revolver .357 mag Blue
+     GI#: 103017681
+     Price: $1,295.00
+
+  Name: SMITH & WESSON 27 9 357 MAG revolver 6 rounds .357 MAG
+     GI#: 103015062
+     Price: $999.99
+
+  Name: S&M MODEL 27 "CLASSIC" 4 INCH .357 MAGNUM "RETRO" REVOLVERHOLIDAY BLOWOUT PRICE
+     GI#: 103014795
+     Price: $1,029.95
+
+  Name: Smith & Wesson 27 2 Revolver .357 mag
+     GI#: 103011622
+     Price: $1,495.00
+
+  Name: Smith & Wesson27 9.357 Magnum
+     GI#: 103007766
+     Price: $999.99
+
+  Name: Smith & Wesson19 4.357 Magnum
+     GI#: 103007519
+     Price: $1,539.99
+
+  Name: Smith & Wesson28 2 Highway Patrolman.357 Magnum
+     GI#: 103007484
+     Price: $1,199.99
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 103006149
+     Price: $1,539.99
+
+  Name: SMITH & WESSON 27 2, 357 MAGNUM, 8 3/8" BLUE, NEW UNFIRED IN S&W, WOOD PRESENTATION CASE, COMES WITH TOOLS, OWNERS MANUAL, ETC.
+     GI#: 103005311
+     Price: $2,195.00
+
+  Name: Smith & Wesson27 3.357 Magnum
+     GI#: 103005245
+     Price: $1,599.99
+
+  Name: S&W 27 2 .357 Mag
+     GI#: 103001712
+     Price: $1,600.00
+
+  Name: Smith & Wesson 27 2, Six Inch N Frame, Factory Nickel, Presentation Cased,.357 Magnum, Trades Welcome!
+     GI#: 103001458
+     Price: $2,399.00
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR72663)
+     GI#: 103000056
+     Price: $1,450.00
+
+  Name: SMITH & WESSON 27 .357 MAG
+     GI#: 102998967
+     Price: $1,200.99
+
+  Name: SMITH & WESSON MODEL 27 1 357 MAGNUM
+     GI#: 102995440
+     Price: $3,850.00
+
+  Name: Smith & Wesson Model 27 2 357 Magnum
+     GI#: 102993896
+     Price: $2,399.00
+
+  Name: SMITH & WESSON 28 2 .357 MAG
+     GI#: 102983902
+     Price: $759.99
+
+  Name: Smith & Wesson 27 2 Nickel (As new in presentation box)
+     GI#: 102981510
+     Price: $1,895.00
+
+  Name: Smith & Wesson27 9.357 Magnum
+     GI#: 102981331
+     Price: $1,099.99
+
+  Name: SMITH & WESSON63.22 LONG RIFLE
+     GI#: 102981209
+     Price: $899.99
+
+  Name: SMITH & WESSON NIB S&W MODEL 27 9 CLASSIC 357 MAG 6.5" BLUED .357 MAG
+     GI#: 102980945
+     Price: $999.99
+
+  Name: Smith & Wesson 27 2 Revolver .357 mag
+     GI#: 102980720
+     Price: $1,295.00
+
+  Name: Smith & Wesson 27 2 357 Mag Nickel
+     GI#: 102980708
+     Price: $1,400.00
+
+  Name: NIB SMITH & WESSON MODEL 27 9 CLASSIC 357MAG 6.5" BLUED REVOLVER
+     GI#: 102980508
+     Price: $999.99
+
+  Name: SMITH & WESSON 27 2 .38 SPECIAL/.357 MAGNUM
+     GI#: 102978292
+     Price: $1,299.99
+
+  Name: Brooklyn Arms Slocum Sliding Chamber Revolver32 RF
+     GI#: 102976077
+     Price: $1,099.00
+
+  Name: SMITH & WESSONMODEL PRE 27357 MAGNUMREVOLVER
+     GI#: 102974355
+     Price: $1,995.99
+
+  Name: Smith & Wesson 27 2 with 8 3/8 inch barrel, full target with Target trigger, hammer and grips.
+     GI#: 102964638
+     Price: $1,298.00
+
+  Name: Smith & Wesson 27 2 357 Mag / 8 3/8" (USED)
+     GI#: 102962105
+     Price: $1,295.00
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR72385)
+     GI#: 102959033
+     Price: $1,895.00
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR72284)
+     GI#: 102954929
+     Price: $1,495.00
+
+  Name: SMITH & WESSON 27 .357 MAG
+     GI#: 102954463
+     Price: $995.99
+
+  Name: SMITH & WESSON 627 2 .357 MAG
+     GI#: 102954445
+     Price: $1,649.99
+
+  Name: SMITH & WESSON MODEL 27 3
+     GI#: 102954020
+     Price: $1250.00
+
+  Name: SMITH & WESSON 27 3 50 TH ANNIVERSARY
+     GI#: 102948581
+     Price: $50
+
+  Name: SMITH & WESSON 27 2 .357 MAG
+     GI#: 102945097
+     Price: $999.99
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR72015)
+     GI#: 102944311
+     Price: $1,695.00
+
+  Name: "Smith & Wesson 27 2 Revolver .357 Magnum (PR71907)
+     GI#: 102941545
+     Price: $1,750.00
+
+  Name: Used Smith & Wesson S&W 27 2 357 Mag Blued 8 3/8" Barrel Walnut Grips
+     GI#: 102940634
+     Price: $1,149.00
+
+  Name: Smith & Wesson28 2 Highway Patrolman.357 Magnum
+     GI#: 102940085
+     Price: $1,199.99
+
+  Name: Smith & Wesson28 2357 MagnumHighway Patrolman Edition
+     GI#: 102932304
+     Price: $1,199.99
+
+  Name: Five inch barrel on this Smith & Wesson 27 2 with custom grips.
+     GI#: 102927290
+     Price: $1,565.00
+
+  Name: SMITH & WESSON PERFORMANCE CENTER 986
+     GI#: 102923918
+     Price: $1,250.00
+
+  Name: "Smith & Wesson 27 9 Classic Revolver .357 Magnum (NGZ3833) NEW
+     GI#: 102913311
+     Price: $1,299.95
+
+  Name: S&W 357 magnum, model 27 2 with 8 3/8 inch barrel.
+     GI#: 102898663
+     Price: $1298
+
+  Name: Smith & WessonModel 27 2.357 Magnum
+     GI#: 102893974
+     Price: $1,599.99
+
+  Name: S&W Model 27 2 Nickel with 5 " barrel in .357 Mag
+     GI#: 102893517
+     Price: $2,500.00
+
+  Name: Smith & Wesson27 2.357 Magnum
+     GI#: 102886020
+     Price: $1,699.99
+
+  Name: Used Smith & Wesson 27 Classic 357 Mag 4" Barrel Blued 150339
+     GI#: 102883128
+     Price: $949.00
+
+  Name: Smith & Wesson S&W 27 3 357 Mag 8 3/8" Barrel Blue Walnut
+     GI#: 102881944
+     Price: $1,229.00
+
+  Name: S&W27 4.357 Mag
+     GI#: 102878642
+     Price: $999.99
+
+  Name: Smith & WessonM27 2357 Magnum
+     GI#: 102860455
+     Price: $2,500.00
+
+Email notifications disabled due to incomplete config.
+--- Scrape job finished at 2025-04-10 23:01:18 --- 
+
+
+--- Running scrape job at 2025-04-10 23:01:18 ---
+Targeting 100 listings.
+Loaded 100 listings from previous run.
+Processing page 1: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=1
+Processing page 2: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=26
+Processing page 3: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=51
+Reached target count of 100 during page 3.
+
+--- Scrape Results ---
+Scraping finished. Found 100 unique listings in current run.
+No new listings found since last run.
+--- Scrape job finished at 2025-04-10 23:01:21 --- 
+
+
+--- Running scrape job at 2025-04-10 23:01:26 ---
+Targeting 100 listings.
+Loaded 100 listings from previous run.
+Processing page 1: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=1
+Processing page 2: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=26
+Processing page 3: https://www.gunsinternational.com/adv-results.cfm?the_order=6&saved_search_id=&keyword=smith+27&exclude_term=&type_cat=Revolvers&price_low=&price_high=&manufacturer=&screenname=&screenname_omit=&seller_sku=&area_code=&age=&start_row=51
+Reached target count of 100 during page 3.
+
+--- Scrape Results ---
+Scraping finished. Found 100 unique listings in current run.
+No new listings found since last run.
+--- Scrape job finished at 2025-04-10 23:01:26 --- 
+
